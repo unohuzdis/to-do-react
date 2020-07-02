@@ -6,7 +6,7 @@ import Item from "./item";
 // import PropTypes from "prop-types";
 // import Item from "./item";
 
-function List({ items }) {
+function List({ items, completeItem }) {
   if (items.length === 0) {
     return (
       <div className="alert alert-success" role="alert">
@@ -16,8 +16,8 @@ function List({ items }) {
   }
   return (
     <ul className="list-group">
-      {items.Items.map((item) => (
-        <Item key={item.id} item={item} />
+      {items.map((item) => (
+        <Item key={item.id} item={item} completeItem={() => completeItem(item.id)} />
       ))}
     </ul>
   );
