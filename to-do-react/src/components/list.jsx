@@ -1,30 +1,42 @@
-import React from "react";
-import Item from "./item";
-// import dateformat from "dateformat";
-// import todo from "./mockData";
+import React, { useState, useEffect, Fragment } from "react";
 
-// import PropTypes from "prop-types";
-// import Item from "./item";
+const List = ({ list, removeItem }) => {
+  const [filtered, setFiltered] = useState([]);
 
-function List({ items, completeItem }) {
-  if (items.length === 0) {
-    return (
-      <div className="alert alert-success" role="alert">
-        Todo list is empty!
-      </div>
-    );
-  }
+  useEffect(() => {
+    setFiltered(list);
+  }, [list]);
+
+  const handleChange = (e) => {
+    let currentList = [];
+    let newList = [];
+
+    if (e.target.value !== "") {
+      currentList = list;
+      newList = currentList.filter((item) => {
+        const lc = item.toLowerCase();
+        const filter = e.target.value.toLowerCase();
+        return lc.includes(filter);
+      });
+    } else {
+      newList = list;
+    }
+    setFiltered(newList);
+  };
+
   return (
-    <ul className="list-group">
-      {items.map((item) => (
-        <Item key={item.id} item={item} completeItem={() => completeItem(item.id)} />
-      ))}
-    </ul>
+    <Fragment>
+      <input type="text" placeholder="Search..." onChange={handleChange} />
+      <ul>
+        {filtered.map((todo, i) => (
+          <li key={`${todo}-${i}`}>
+            {todo} &nbsp;
+            <span onClick={() => removeItem(todo)}>x</span>
+          </li>
+        ))}
+      </ul>
+    </Fragment>
   );
-}
-// List.propTypes = {
-//   items: PropTypes.array.isRequired,
-//   completeItem: PropTypes.func.isRequired,
-// };
+};
 
 export default List;
